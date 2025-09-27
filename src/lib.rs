@@ -131,18 +131,17 @@ mod tests {
     }
 
     #[test]
-    fn test_schnorr_with_1024_bit_constants() {
-        use hex;
+    fn test_schnorr_with_rfc3526_group2() {
+        let p_hex = "FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA237327FFFFFFFFFFFFFFFF";
+        let p = BigUint::parse_bytes(p_hex.as_bytes(), 16).unwrap();
 
-        let p_hex = "B10B8F96A080E01DDE92DE5EAE5D54EC52C99FBCFB06A3C69A6A9DCA52D23B616073E28675A23D189838EF1E2EE652C013ECB4AEA906112324975FD1247761E5C5A458E8803F6D115886E2D3B9F46D9B975B1466E22BF494602C973E068B202B12A3D1B6D0B6E1F3ED40B2778E251D83B0645070968068F3F57726DD1CA2AD9433DE22D94203F3A07CC3";
-        let p = BigUint::from_bytes_be(&hex::decode(p_hex).unwrap());
+        // q = (p-1)/2
+        let q = (&p - BigUint::from(1u32)) / BigUint::from(2u32);
 
-        let q_hex = "F518AA8781A8A6508C3099A156CB919584F81B83";
-        let q = BigUint::from_bytes_be(&hex::decode(q_hex).unwrap());
+        // alpha (g) = 2
+        let alpha = BigUint::from(2u32);
 
-        let alpha_hex = "A4D1CBD5C3FD34126765A442EFB99905F8104DD258AC507FD6406CFF14266D31266A047405B28952B21D627A693A6AE14F182B15C4828E679824B1417FD69C62157B5897E5425656DEC238EC8FEDFB6B84136437166145018BF1B6D9008AD4368D84A44664DE8E5912EDBE5ED449561E6F0BB805C4B594B8123B89AB6B01B054B";
-        let alpha = BigUint::from_bytes_be(&hex::decode(alpha_hex).unwrap());
-
+        // beta = alpha^random mod p
         let random_power = generate_random_below(&q);
         let beta = alpha.modpow(&random_power, &p);
 
@@ -162,7 +161,7 @@ mod tests {
 
         assert!(
             result,
-            "Doğrulama, 1024-bit'lik güvenli sabitlerle bile başarılı olmalıydı."
+            "Validation should have been successful with RFC 3526 Group 2 parameters."
         );
     }
 }
