@@ -1,0 +1,52 @@
+syntax = "proto3";
+package zkp_auth;
+
+/*
+ * Prover registers in the server sending:
+ * y1 = alpha^x mod p
+ * y2 = beta^x mod p
+ */ 
+message RegisterRequest {
+    string user = 1;
+    bytes y1 = 2;
+    bytes y2 = 3;
+}
+
+message RegisterResponse {}
+
+/*
+ * Prover ask for challenge in the server sending
+ * r1 = alpha^k mod p
+ * r2 = beta^k mod p
+ * Verifier sends the challenge "c" back
+ */ 
+message AuthenticationChallengeRequest {
+    string user = 1;
+    bytes r1 = 2;
+    bytes r2 = 3;
+}
+
+message AuthenticationChallengeResponse {
+    string auth_id = 1;
+    bytes c = 2;
+}
+
+/*
+ * Prover sends solution "s = k - c * x mod q" to the challenge
+ * Verifier sends the session ID if the solution is correct
+ */ 
+message AuthenticationAnswerRequest {
+    string auth_id = 1;
+    bytes s = 2;
+}
+
+message AuthenticationAnswerResponse {
+    bool success = 1;     
+    string session_id = 2; 
+}
+
+service Auth {
+    rpc Register(RegisterRequest) returns (RegisterResponse) {}
+    rpc CreateAuthenticationChallenge(AuthenticationChallengeRequest) returns (AuthenticationChallengeResponse) {}
+    rpc VerifyAuthentication(AuthenticationAnswerRequest) returns (AuthenticationAnswerResponse) {}
+}
