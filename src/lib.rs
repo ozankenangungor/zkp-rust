@@ -1,4 +1,5 @@
-use num_bigint::BigUint;
+use num_bigint::{BigUint, RandBigInt};
+use rand::thread_rng;
 
 /// output = n^exp mod p
 pub fn exponentiate(n: &BigUint, exponent: &BigUint, modulus: &BigUint) -> BigUint {
@@ -42,47 +43,46 @@ pub fn verify(
     cond1 && cond2
 }
 
+pub fn generate_random_below(bound: &BigUint) -> BigUint {
+    let mut rng = thread_rng();
+
+    rng.gen_biguint_below(bound)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use num_bigint::BigUint;
 
     #[test]
-    fn test_schnorr_protocol_happy_path() {
+    fn test_schnorr_protocol_with_random_values() {
+        use super::generate_random_below;
+
         let alpha = BigUint::from(4u32);
         let beta = BigUint::from(9u32);
         let p = BigUint::from(23u32);
         let q = BigUint::from(11u32);
 
         let x = BigUint::from(6u32);
-        let k = BigUint::from(7u32);
 
-        let c = BigUint::from(4u32);
+        let k = generate_random_below(&q);
+        let c = generate_random_below(&q);
 
         let y1 = exponentiate(&alpha, &x, &p);
         let y2 = exponentiate(&beta, &x, &p);
-
         assert_eq!(y1, BigUint::from(2u32));
         assert_eq!(y2, BigUint::from(3u32));
 
         let r1 = exponentiate(&alpha, &k, &p);
         let r2 = exponentiate(&beta, &k, &p);
-
-        assert_eq!(r1, BigUint::from(8u32));
-        assert_eq!(r2, BigUint::from(4u32));
-
         let s = solve(&k, &c, &x, &q);
 
-        assert_eq!(s, BigUint::from(5u32));
-
         let result = verify(&r1, &r2, &y1, &y2, &alpha, &beta, &c, &s, &p);
-
         assert!(
             result,
-            "Validation should have been successful with correct inputs."
+            "Doğrulama, rastgele girdilerle bile başarılı olmalıydı."
         );
     }
-
     #[test]
     fn test_schnorr_protocol_fake_secret_fails() {
         let alpha = BigUint::from(4u32);
