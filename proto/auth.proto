@@ -1,5 +1,5 @@
 syntax = "proto3";
-package zkp_auth;
+package zkp;
 
 /*
  * Prover registers in the server sending:
@@ -41,8 +41,7 @@ message AuthenticationAnswerRequest {
 }
 
 message AuthenticationAnswerResponse {
-    bool success = 1;     
-    string session_id = 2; 
+    string session_id = 1;
 }
 
 service Auth {
