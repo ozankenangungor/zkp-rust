@@ -1,5 +1,5 @@
 syntax = "proto3";
-package zkp;
+package zkp_auth;
 
 /*
  * Prover registers in the server sending:
