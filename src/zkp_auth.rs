@@ -60,8 +60,8 @@ pub struct AuthenticationAnswerResponse {
 /// Generated client implementations.
 pub mod auth_client {
     #![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
-    use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    use tonic::codegen::*;
     #[derive(Debug, Clone)]
     pub struct AuthClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -92,22 +92,18 @@ pub mod auth_client {
             let inner = tonic::client::Grpc::with_origin(inner, origin);
             Self { inner }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> AuthClient<InterceptedService<T, F>>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> AuthClient<InterceptedService<T, F>>
         where
             F: tonic::service::Interceptor,
             T::ResponseBody: Default,
             T: tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-                Response = http::Response<
-                    <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                    http::Request<tonic::body::BoxBody>,
+                    Response = http::Response<
+                        <T as tonic::client::GrpcService<tonic::body::BoxBody>>::ResponseBody,
+                    >,
                 >,
-            >,
-            <T as tonic::codegen::Service<
-                http::Request<tonic::body::BoxBody>,
-            >>::Error: Into<StdError> + Send + Sync,
+            <T as tonic::codegen::Service<http::Request<tonic::body::BoxBody>>>::Error:
+                Into<StdError> + Send + Sync,
         {
             AuthClient::new(InterceptedService::new(inner, interceptor))
         }
@@ -145,23 +141,18 @@ pub mod auth_client {
         pub async fn register(
             &mut self,
             request: impl tonic::IntoRequest<super::RegisterRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::RegisterResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> std::result::Result<tonic::Response<super::RegisterResponse>, tonic::Status> {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/zkp_auth.Auth/Register");
             let mut req = request.into_request();
-            req.extensions_mut().insert(GrpcMethod::new("zkp_auth.Auth", "Register"));
+            req.extensions_mut()
+                .insert(GrpcMethod::new("zkp_auth.Auth", "Register"));
             self.inner.unary(req, path, codec).await
         }
         pub async fn create_authentication_challenge(
@@ -171,46 +162,36 @@ pub mod auth_client {
             tonic::Response<super::AuthenticationChallengeResponse>,
             tonic::Status,
         > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static(
                 "/zkp_auth.Auth/CreateAuthenticationChallenge",
             );
             let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(
-                    GrpcMethod::new("zkp_auth.Auth", "CreateAuthenticationChallenge"),
-                );
+            req.extensions_mut().insert(GrpcMethod::new(
+                "zkp_auth.Auth",
+                "CreateAuthenticationChallenge",
+            ));
             self.inner.unary(req, path, codec).await
         }
         pub async fn verify_authentication(
             &mut self,
             request: impl tonic::IntoRequest<super::AuthenticationAnswerRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AuthenticationAnswerResponse>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::new(
-                        tonic::Code::Unknown,
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
+        ) -> std::result::Result<tonic::Response<super::AuthenticationAnswerResponse>, tonic::Status>
+        {
+            self.inner.ready().await.map_err(|e| {
+                tonic::Status::new(
+                    tonic::Code::Unknown,
+                    format!("Service was not ready: {}", e.into()),
+                )
+            })?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/zkp_auth.Auth/VerifyAuthentication",
-            );
+            let path = http::uri::PathAndQuery::from_static("/zkp_auth.Auth/VerifyAuthentication");
             let mut req = request.into_request();
             req.extensions_mut()
                 .insert(GrpcMethod::new("zkp_auth.Auth", "VerifyAuthentication"));
@@ -228,10 +209,7 @@ pub mod auth_server {
         async fn register(
             &self,
             request: tonic::Request<super::RegisterRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::RegisterResponse>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<super::RegisterResponse>, tonic::Status>;
         async fn create_authentication_challenge(
             &self,
             request: tonic::Request<super::AuthenticationChallengeRequest>,
@@ -242,10 +220,7 @@ pub mod auth_server {
         async fn verify_authentication(
             &self,
             request: tonic::Request<super::AuthenticationAnswerRequest>,
-        ) -> std::result::Result<
-            tonic::Response<super::AuthenticationAnswerResponse>,
-            tonic::Status,
-        >;
+        ) -> std::result::Result<tonic::Response<super::AuthenticationAnswerResponse>, tonic::Status>;
     }
     #[derive(Debug)]
     pub struct AuthServer<T: Auth> {
@@ -270,10 +245,7 @@ pub mod auth_server {
                 max_encoding_message_size: None,
             }
         }
-        pub fn with_interceptor<F>(
-            inner: T,
-            interceptor: F,
-        ) -> InterceptedService<Self, F>
+        pub fn with_interceptor<F>(inner: T, interceptor: F) -> InterceptedService<Self, F>
         where
             F: tonic::service::Interceptor,
         {
@@ -329,13 +301,9 @@ pub mod auth_server {
                 "/zkp_auth.Auth/Register" => {
                     #[allow(non_camel_case_types)]
                     struct RegisterSvc<T: Auth>(pub Arc<T>);
-                    impl<T: Auth> tonic::server::UnaryService<super::RegisterRequest>
-                    for RegisterSvc<T> {
+                    impl<T: Auth> tonic::server::UnaryService<super::RegisterRequest> for RegisterSvc<T> {
                         type Response = super::RegisterResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::RegisterRequest>,
@@ -371,20 +339,14 @@ pub mod auth_server {
                 "/zkp_auth.Auth/CreateAuthenticationChallenge" => {
                     #[allow(non_camel_case_types)]
                     struct CreateAuthenticationChallengeSvc<T: Auth>(pub Arc<T>);
-                    impl<
-                        T: Auth,
-                    > tonic::server::UnaryService<super::AuthenticationChallengeRequest>
-                    for CreateAuthenticationChallengeSvc<T> {
+                    impl<T: Auth> tonic::server::UnaryService<super::AuthenticationChallengeRequest>
+                        for CreateAuthenticationChallengeSvc<T>
+                    {
                         type Response = super::AuthenticationChallengeResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<
-                                super::AuthenticationChallengeRequest,
-                            >,
+                            request: tonic::Request<super::AuthenticationChallengeRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
                             let fut = async move {
@@ -419,23 +381,17 @@ pub mod auth_server {
                 "/zkp_auth.Auth/VerifyAuthentication" => {
                     #[allow(non_camel_case_types)]
                     struct VerifyAuthenticationSvc<T: Auth>(pub Arc<T>);
-                    impl<
-                        T: Auth,
-                    > tonic::server::UnaryService<super::AuthenticationAnswerRequest>
-                    for VerifyAuthenticationSvc<T> {
+                    impl<T: Auth> tonic::server::UnaryService<super::AuthenticationAnswerRequest>
+                        for VerifyAuthenticationSvc<T>
+                    {
                         type Response = super::AuthenticationAnswerResponse;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::Response>,
-                            tonic::Status,
-                        >;
+                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
                             request: tonic::Request<super::AuthenticationAnswerRequest>,
                         ) -> Self::Future {
                             let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                (*inner).verify_authentication(request).await
-                            };
+                            let fut = async move { (*inner).verify_authentication(request).await };
                             Box::pin(fut)
                         }
                     }
@@ -462,18 +418,14 @@ pub mod auth_server {
                     };
                     Box::pin(fut)
                 }
-                _ => {
-                    Box::pin(async move {
-                        Ok(
-                            http::Response::builder()
-                                .status(200)
-                                .header("grpc-status", "12")
-                                .header("content-type", "application/grpc")
-                                .body(empty_body())
-                                .unwrap(),
-                        )
-                    })
-                }
+                _ => Box::pin(async move {
+                    Ok(http::Response::builder()
+                        .status(200)
+                        .header("grpc-status", "12")
+                        .header("content-type", "application/grpc")
+                        .body(empty_body())
+                        .unwrap())
+                }),
             }
         }
     }
