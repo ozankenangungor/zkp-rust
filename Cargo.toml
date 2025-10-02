@@ -1,15 +1,36 @@
 [package]
 name = "zkp"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
 hex = "0.4.3"
-num-bigint = { version = "0.4", features = ["rand"] }
+num-bigint = { version = "0.4", features = ["rand", "serde"] }
 rand = "0.8"
 tonic = "0.9"
 prost = "0.11"
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+config = "0.14"
+anyhow = "1.0"
+thiserror = "1.0"
+uuid = { version = "1.0", features = ["v4"] }
+clap = { version = "4.0", features = ["derive", "env"] }
+tower = "0.4"
+tower-http = { version = "0.4", features = [
+    "trace",
+    "cors",
+    "timeout",
+    "limit",
+] }
+async-trait = "0.1"
+futures = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+rpassword = "7.0"
+sha2 = "0.10"
 
 [build-dependencies]
 tonic-build = "0.9"
@@ -21,3 +42,11 @@ path = "./src/server.rs"
 [[bin]]
 name = "client"
 path = "./src/client.rs"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+tokio-test = "0.4"
+
+[[bench]]
+name = "zkp_benchmark"
+harness = false

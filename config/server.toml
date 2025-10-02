@@ -1,0 +1,15 @@
+# ZKP Authentication Server Configuration
+
+# Server binding configuration
+host = "0.0.0.0"
+port = 50051
+
+# Performance settings
+request_timeout_secs = 30
+max_concurrent_streams = 100
+
+# Feature flags
+enable_reflection = false
+
+# Logging
+log_level = "info"

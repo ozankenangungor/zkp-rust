@@ -1,1 +1,41 @@
+# Rust build artifacts
 /target
+**/*.rs.bk
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Generated proto files (already in src/)
+# src/zkp_auth.rs is generated but committed for convenience
+
+# Benchmark results
+/target/criterion/
+
+# Test outputs
+test-results/
+
+# Docker volumes
+docker-data/
+
+IMPLEMENTATION_SUMMARY.md
